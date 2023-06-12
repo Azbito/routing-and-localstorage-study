@@ -1,6 +1,5 @@
 <template>
   <div className="home-container">
-    <p>Hello! Let's make your ID</p>
     <div>
       <IDCard :name="infosParsed.name" :lastName="infosParsed.lastName" :nickname="infosParsed.nickname"/>
     </div>
@@ -28,7 +27,7 @@
   justify-content: center;
   flex-direction: column;
   background-color: rgb(54, 54, 54);
-  width: 80%;
+  width: 40%;
   padding: 2rem 0;
   gap: 1rem;
   border-radius: 16px;
@@ -63,7 +62,6 @@
 
 <script>
 import IDCard from '../components/IDCard.vue'
-import { useRouter } from 'vue-router'
 
 export default {
   name: "HomeComponent",
@@ -91,12 +89,12 @@ export default {
       this.infos[prop] = value
     },
     saveData() {
-      localStorage.setItem('infos', JSON.stringify(this.infos))
-      location.reload()
-    },
-    goToPage: function(url) {
-      const router = useRouter()
-      router.push(url)
+      if (this.infos.name && this.infos.lastName && this.infos.nickname !== '') {
+        localStorage.setItem('infos', JSON.stringify(this.infos))
+        location.reload()
+        return;
+      }
+      alert('Please, fill all the blanks')
     }
   }
 }

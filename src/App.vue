@@ -3,11 +3,29 @@ import { RouterLink, RouterView } from 'vue-router'
 </script>
 
 <template>
-<RouterLink to="/">Home</RouterLink>
-<RouterLink to="/about">About</RouterLink>
+<div class="nav">
+<RouterLink class="link" to="/">Home</RouterLink>
+<RouterLink class="link" to="/about">About</RouterLink>
+</div>
 <RouterView />
 </template>
 
-<style scoped>
+<style lang="scss">
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background-color: rgb(43, 41, 41);
+  width: 100vw;
+  height: 2rem;
 
+  .link {
+    text-decoration: none;
+    color: white;
+
+    &:visited {
+      color: white
+    }
+  }
+}
 </style>
