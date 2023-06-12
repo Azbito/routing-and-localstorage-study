@@ -1,16 +1,69 @@
 <template>
-  <div>
+  <div className="home-container">
     <p>Hello! Let's make your ID</p>
     <div>
-    <IDCard :name="name" />
+      <IDCard :name="infosParsed.name" :lastName="infosParsed.lastName" :nickname="infosParsed.nickname"/>
     </div>
-    <input @change="onChange" :value="name" />
+    <div class="container-info-changer">
+       <input placeholder="What's your first name?" @input="onChange('name', $event.target.value)" :value="infos.name" />
+       <input placeholder="What's your last name?" @input="onChange('lastName', $event.target.value)" :value="infos.lastName" />
+       <input placeholder="What's your nickname?" @input="onChange('nickname', $event.target.value)" :value="infos.nickname" />
+       <button @click="saveData()">Save</button>
+    </div>
   </div>
 </template>
 
+<style lang="scss">
+.home-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin-top: 4rem;
+  gap: 4rem;
+}
+.container-info-changer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background-color: rgb(54, 54, 54);
+  width: 80%;
+  padding: 2rem 0;
+  gap: 1rem;
+  border-radius: 16px;
+
+  input {
+    border: none;
+    outline: none;
+    padding: .5rem;
+    border-radius: 16px
+  }
+
+  button {
+    border: none;
+    outline: none;
+    padding: .5rem;
+    border-radius: 16px;
+    background-color: rgb(40, 184, 27);
+    color: white;
+    cursor: pointer;
+    transition: .2s;
+
+    &:hover {
+      background-color: rgb(37, 156, 26);
+    }
+
+    &:active {
+      background-color: rgb(31, 126, 23);
+    }
+  }
+}
+</style>
+
 <script>
-import { ref } from 'vue'
-import IDCard from '../components/IDCard.vue' // Import the IDCard component
+import IDCard from '../components/IDCard.vue'
+import { useRouter } from 'vue-router'
 
 export default {
   name: "HomeComponent",
@@ -18,20 +71,34 @@ export default {
     IDCard,
   },
   data() {
-    const previousName = localStorage.getItem('name') || ''
-    const name = ref(previousName)
-
-    const step = 0
     return {
-      name: name,
-      step: step
+      infos: {
+        name: '',
+        lastName: '',
+        nickname: ''
+      },
+      infosParsed: {}
+    }
+  },
+  mounted() {
+    const storedInfos = localStorage.getItem('infos')
+    if (storedInfos) {
+      this.infosParsed = JSON.parse(storedInfos)
     }
   },
   methods: {
-    onChange(event) {
-      this.name = event.target.value
-      localStorage.setItem('name', this.name)
+    onChange(prop, value) {
+      this.infos[prop] = value
+    },
+    saveData() {
+      localStorage.setItem('infos', JSON.stringify(this.infos))
+      location.reload()
+    },
+    goToPage: function(url) {
+      const router = useRouter()
+      router.push(url)
     }
   }
 }
 </script>
+
